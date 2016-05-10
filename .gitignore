@@ -1,5 +1,9 @@
+.cache
+.coverage
+.tox
 doc/sphinx/_build
 doc/sphinx-api/
+htmlcov/
 *.pyc
 *.confc
 *.egg-info

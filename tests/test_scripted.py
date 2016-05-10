@@ -9,15 +9,19 @@
     See http://chandlerproject.org/Projects/Davclient
         http://svn.osafoundation.org/tools/davclient/trunk/src/davclient/davclient.py
 """
+from __future__ import print_function
+
+import os
+import time
 from tempfile import gettempdir
+from threading import Thread
+import unittest
+
+from tests import davclient
+from wsgidav import compat
 from wsgidav.wsgidav_app import DEFAULT_CONFIG, WsgiDAVApp
 from wsgidav.fs_dav_provider import FilesystemProvider
 from wsgidav.server.ext_wsgiutils_server import ExtServer
-import time
-import os
-import unittest
-import davclient #@UnresolvedImport
-from threading import Thread
 
 
 #===============================================================================
@@ -160,14 +164,15 @@ class ServerTest(unittest.TestCase):
         client = self.client
 
         # Prepare file content
-        data1 = "this is a file\nwith two lines"
-        data2 = "this is another file\nwith three lines\nsee?"
+        data1 = b"this is a file\nwith two lines"
+        data2 = b"this is another file\nwith three lines\nsee?"
         # Big file with 10 MB
         lines = []
         line = "." * (1000-6-len("\n"))
-        for i in xrange(10*1000):
+        for i in compat.xrange(10*1000):
             lines.append("%04i: %s\n" % (i, line))
         data3 = "".join(lines)
+        data3 = compat.to_bytes(data3)
 
         # Cleanup
         client.delete("/test/")
@@ -262,7 +267,7 @@ class ServerTest(unittest.TestCase):
 #
 #        # Request must not contain a body (expect '415 Media Type Not Supported')
 #        app.get("/file1.txt",
-#                headers={"Content-Length": str(len(data1))},
+#                headers={"Content-Length": to_native(len(data1))},
 #                params=data1,
 #                status=415)
 #

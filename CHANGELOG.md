@@ -2,6 +2,10 @@
 CHANGES
 =======
 
+3.0.0-0 / Unreleased
+====================
+
+
 1.2.1 / Unreleased
 ==================
 - #19: Add configurable support for setting last modified file/directory timestamps
